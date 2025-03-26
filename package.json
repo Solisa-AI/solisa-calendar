@@ -1,0 +1,53 @@
+{
+  "name": "solisa-calendar",
+  "version": "1.2.0",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "files": [
+    "dist"
+  ],
+  "types": "dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "rollup": "rollup -c"
+  },
+  "keywords": [],
+  "author": "Gavin Holtzapple",
+  "license": "ISC",
+  "description": "Calendar component made for Solisa.Ai",
+  "peerDependencies": {
+    "react": ">=15.0.1",
+    "react-dom": ">=15.0.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.27.0",
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-react": "^7.26.3",
+    "@types/react": "^19.0.12",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-typescript": "^8.3.0",
+    "react": "^19.0.0",
+    "react-dom": ">=15.0.1",
+    "rollup": "^2.79.2",
+    "rollup-plugin-babel": "^4.4.0",
+    "typescript": "^5.8.2",
+    "webpack-cli": "^6.0.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Solisa-AI/solisa-calendar.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Solisa-AI/solisa-calendar/issues"
+  },
+  "homepage": "https://github.com/Solisa-AI/solisa-calendar#readme",
+  "dependencies": {
+    "react": ">=15.0.1"
+  }
+}
