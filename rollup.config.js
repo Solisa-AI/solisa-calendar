@@ -3,7 +3,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import dts from "rollup-plugin-dts";
 
-const packageJson = require("./package.json");
+import packageJson from "./package.json";
 
 export default [
   {
@@ -27,9 +27,9 @@ export default [
     ],
   },
   {
-    input: "dist/esm/types/index.d.ts",
+    // Now points to the correct declaration file location
+    input: "types/index.d.ts",
     output: [{ file: "dist/index.d.ts", format: "esm" }],
     plugins: [dts()],
   },
 ];
-
