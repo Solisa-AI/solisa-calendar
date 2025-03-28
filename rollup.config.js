@@ -1,9 +1,8 @@
-import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
-import dts from "rollup-plugin-dts";
-
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 import packageJson from "./package.json";
+import { dts } from "rollup-plugin-dts";
 
 export default [
   {
@@ -21,14 +20,16 @@ export default [
       },
     ],
     plugins: [
-      resolve(),
+      nodeResolve({
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
+      }),
       commonjs(),
       typescript({ tsconfig: "./tsconfig.json" }),
     ],
+    external: ['react', 'react-dom'],
   },
   {
-    // Now points to the correct declaration file location
-    input: "types/index.d.ts",
+    input: "src/index.ts",
     output: [{ file: "dist/index.d.ts", format: "esm" }],
     plugins: [dts()],
   },

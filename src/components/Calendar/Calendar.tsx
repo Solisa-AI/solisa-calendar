@@ -1,11 +1,9 @@
-import React from "react";
+import React from "react"
 
-export interface ButtonProps {
-  label: string;
+const Calendar = () => {
+	return (
+		<button>Click Me!</button>
+	)
 }
 
-const Button = (props: ButtonProps) => {
-  return <button>{props.label}</button>;
-};
-
-export default Button;
+export default Calendar
