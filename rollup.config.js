@@ -1,7 +1,7 @@
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import packageJson from "./package.json";
+import packageJson from "./package.json" with { type: "json" };
 import { dts } from "rollup-plugin-dts";
 
 export default [
