@@ -22,7 +22,6 @@ const App = () => (
 );
 
 export default App;
-
 ```
 
 WeekCal
@@ -30,7 +29,7 @@ WeekCal
 ```
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import { WeekCal } from 'solisa-calendar';
 import { events } from '@/app/temp/sampledata';
 
@@ -43,7 +42,6 @@ const App = () => {
 };
 
 export default App;
-
 ```
 
 MonthCal
@@ -51,22 +49,19 @@ MonthCal
 ```
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import { MonthCal } from 'solisa-calendar';
 import { events } from '@/app/temp/sampledata';
 
 const App = () => {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
-
   return (
     <>
-      <MonthCal events={events ?? []} currentDate={currentDate} />
+      <MonthCal events={events ?? []}/>
     </>
   );
 };
 
 export default App;
-
 ```
 
 YearCal
@@ -74,37 +69,20 @@ YearCal
 ```
 'use client'
 
-import React, { useState } from 'react';
+import React from 'react';
 import { YearCal } from 'solisa-calendar';
 
 const App = () => {
 
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [view, setView] = useState("month");
-
-
-  function onSelectDate(day: Date) {
-    setCurrentDate(day);
-    setView("day");
-  }
-
-  function onSelectMonth(month: Date) {
-    setCurrentDate(month);
-    setView("month");
-  }
-
   return (
     <>
-      <YearCal
-        currentDate={currentDate}
-        onSelectMonth={onSelectMonth}
-        onSelectDate={onSelectDate}
-      />
+      <YearCal/>
     </>
   );
 };
 
 export default App;
+
 ```
 
 
