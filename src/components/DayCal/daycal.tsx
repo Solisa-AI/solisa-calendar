@@ -11,7 +11,7 @@ interface DailyCalendarProps {
   initialDate?: Date
 }
 
-const DayView: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date() }) => {
+const DayCal: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date() }) => {
   const [currentDate, setCurrentDate] = useState<Date>(initialDate)
   const [processedEvents, setProcessedEvents] = useState<{
     allDay: Event[]
@@ -255,4 +255,4 @@ const DayView: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date(
   )
 }
 
-export default DayView;
+export default DayCal;
