@@ -106,3 +106,14 @@ const App = () => {
 
 export default App;
 ```
+
+
+
+
+**testing locally**
+This is how I test this component locally.
+
+
+1. In this repo, I ``npm run rollup`` to compile the package locally.
+2. In a sample nextjs app, ``npm install`` the path of this package on your machine
+3. Use the component as you wish in your sample app.
