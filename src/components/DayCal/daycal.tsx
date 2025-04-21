@@ -1,17 +1,21 @@
-import React from "react"
-
-import { useState, useEffect } from "react"
+import React, { useState, useEffect, CSSProperties } from "react"
 import type { Event } from "../../types"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "../ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog"
 
+type CustomSize = {
+  width?: string
+  height?: string
+}
+
 interface DailyCalendarProps {
   events: Event[]
   initialDate?: Date
+  size?: CustomSize
 }
 
-const DayCal: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date() }) => {
+const DayCal: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date(), size }) => {
   const [currentDate, setCurrentDate] = useState<Date>(initialDate)
   const [processedEvents, setProcessedEvents] = useState<{
     allDay: Event[]
@@ -22,12 +26,10 @@ const DayCal: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date()
 
   const hours = Array.from({ length: 24 }, (_, i) => i)
 
-  // Format date as YYYY-MM-DD
   const formatDate = (date: Date): string => {
     return date.toISOString().split("T")[0]
   }
 
-  // Format time as HH:MM AM/PM
   const formatTime = (hour: number): string => {
     if (hour === 0) return "12 AM"
     if (hour === 12) return "12 PM"
@@ -68,6 +70,7 @@ const DayCal: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date()
       height: `${height}%`,
       backgroundColor: event.color.background,
       color: event.color.foreground,
+      borderColor: event.color.background, // Add border for visibility
     }
   }
 
@@ -128,14 +131,31 @@ const DayCal: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date()
     })
   }
 
-  // Calculate the number of all-day events to determine spacing
-  const allDayEventsHeight = processedEvents.allDay.length * 28 
-  const allDayContainerHeight = allDayEventsHeight > 0 ? allDayEventsHeight + 16 : 0 
+  const allDayEventsHeight = processedEvents.allDay.length * 28
+  const allDayContainerHeight = allDayEventsHeight > 0 ? allDayEventsHeight + 16 : 0
+
+  let containerStyle: CSSProperties = {}
+  let hasCustomHeight = false;
+  if (typeof size === 'object' && size !== null) {
+      if (size.width) {
+          containerStyle.width = size.width;
+      }
+      if (size.height) {
+          containerStyle.height = size.height;
+          hasCustomHeight = true;
+      }
+  }
+
+  const gridContainerClasses = `grid grid-cols-[80px_1fr] ${hasCustomHeight ? 'flex-1 overflow-y-auto' : 'h-[800px] overflow-y-auto'}`;
+
 
   return (
     <>
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <div className="p-4 border-b flex items-center justify-between">
+      <div
+        className="bg-white rounded-lg shadow overflow-hidden flex flex-col"
+        style={containerStyle}
+       >
+        <div className="p-4 border-b flex items-center justify-between flex-shrink-0">
           <h2 className="text-xl font-semibold">{formatDateHeader(currentDate)}</h2>
           <div className="flex space-x-2">
             <Button variant="outline" size="sm" onClick={goToPreviousDay}>
@@ -150,13 +170,13 @@ const DayCal: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date()
           </div>
         </div>
 
-        <div className="grid grid-cols-[80px_1fr] h-[800px] overflow-y-auto">
+        <div className={gridContainerClasses}>
           {allDayContainerHeight > 0 && (
             <>
-              <div className="border-r border-b p-2 bg-gray-50 flex items-center justify-end pr-2 text-sm text-gray-500">
+              <div className="col-start-1 col-end-2 border-r border-b p-2 bg-gray-50 flex items-center justify-end pr-2 text-sm text-gray-500 sticky top-0 z-20">
                 All day
               </div>
-              <div className="relative border-b p-2" style={{ height: `${allDayContainerHeight}px` }}>
+              <div className="col-start-2 col-end-3 relative border-b p-2 sticky top-0 z-20 bg-white" style={{ height: `${allDayContainerHeight}px` }}>
                 {processedEvents.allDay.map((event) => (
                   <div
                     key={event.id}
@@ -175,48 +195,47 @@ const DayCal: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date()
             </>
           )}
 
-          {/* Time Column */}
-          <div className="border-r sticky left-0 bg-white z-10">
-            {hours.map((hour) => (
-              <div key={hour} className="h-12 border-t flex items-start justify-end pr-2 text-sm text-gray-500">
-                {formatTime(hour)}
-              </div>
-            ))}
+          <div className="col-start-1 col-end-2 border-r sticky left-0 bg-white z-10">
+             {hours.map((hour) => (
+               <div key={hour} className="h-12 border-t flex items-start justify-end pr-2 text-sm text-gray-500 pt-1">
+                 {formatTime(hour)}
+               </div>
+             ))}
           </div>
 
-          <div className="relative">
-            <div className="relative h-full">
-              {hours.map((hour) => (
-                <div key={hour} className="h-12 border-t"></div>
-              ))}
+          <div className="col-start-2 col-end-3 relative">
+             <div className="relative h-[1152px]">
+               {hours.map((hour) => (
+                 <div key={hour} className="h-12 border-t"></div>
+               ))}
 
-              {formatDate(currentDate) === formatDate(new Date()) && (
-                <div
-                  className="absolute left-0 right-0 border-t border-red-500 z-20"
-                  style={{
-                    top: `${((new Date().getHours() * 60 + new Date().getMinutes()) / (24 * 60)) * 100}%`,
-                  }}
-                >
-                  <div className="w-2 h-2 rounded-full bg-red-500 -mt-1 -ml-1"></div>
-                </div>
-              )}
+               {formatDate(currentDate) === formatDate(new Date()) && (
+                 <div
+                   className="absolute left-0 right-0 border-t border-red-500 z-20"
+                   style={{
+                     top: `${((new Date().getHours() * 60 + new Date().getMinutes()) / (24 * 60)) * 100}%`,
+                   }}
+                 >
+                   <div className="w-2 h-2 rounded-full bg-red-500 -mt-1 -ml-1"></div>
+                 </div>
+               )}
 
-              {processedEvents.timed.map((event) => (
-                <div
-                  key={event.id}
-                  className="absolute z-10 left-0 right-0 mx-4 px-3 py-1 rounded text-xs overflow-hidden cursor-pointer hover:opacity-80"
-                  style={calculateEventStyle(event)}
-                  title={`${event.title} (${new Date(event.start).toLocaleTimeString()} - ${new Date(event.end).toLocaleTimeString()})`}
-                  onClick={() => handleEventClick(event)}
-                >
-                  <div className="font-semibold">{event.title}</div>
-                  <div className="text-xs opacity-80">
-                    {new Date(event.start).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} -
-                    {new Date(event.end).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                  </div>
-                </div>
-              ))}
-            </div>
+               {processedEvents.timed.map((event) => (
+                 <div
+                   key={event.id}
+                   className="absolute z-10 left-0 right-0 mx-1 px-2 py-0.5 rounded text-xs overflow-hidden cursor-pointer hover:opacity-80 border"
+                   style={calculateEventStyle(event)}
+                   title={`${event.title} (${new Date(event.start).toLocaleTimeString()} - ${new Date(event.end).toLocaleTimeString()})`}
+                   onClick={() => handleEventClick(event)}
+                 >
+                   <div className="font-semibold truncate">{event.title}</div>
+                   <div className="text-[10px] opacity-80">
+                     {new Date(event.start).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })} -{' '}
+                     {new Date(event.end).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
+                   </div>
+                 </div>
+               ))}
+             </div>
           </div>
         </div>
       </div>
@@ -235,10 +254,10 @@ const DayCal: React.FC<DailyCalendarProps> = ({ events, initialDate = new Date()
                 />
                 <span className="font-medium">
                   {new Date(selectedEvent.start).getHours() === 0 &&
-                    new Date(selectedEvent.start).getMinutes() === 0 &&
-                    (new Date(selectedEvent.end).getHours() === 23 ||
-                      (new Date(selectedEvent.end).getHours() === 0 &&
-                        new Date(selectedEvent.end).getDate() > new Date(selectedEvent.start).getDate())) ? (
+                  new Date(selectedEvent.start).getMinutes() === 0 &&
+                  (new Date(selectedEvent.end).getHours() === 23 ||
+                    (new Date(selectedEvent.end).getHours() === 0 &&
+                      new Date(selectedEvent.end).getDate() > new Date(selectedEvent.start).getDate())) ? (
                     "All day"
                   ) : (
                     <>
