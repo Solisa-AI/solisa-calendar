@@ -31,10 +31,10 @@ function classNames(...classes: (string | boolean | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-// --- Size Prop Definitions ---
+
 type CustomSize = {
-  width?: string;  // e.g., '80vw', '600px', '100%'
-  height?: string; // e.g., '70vh', '500px'
+  width?: string;  
+  height?: string; 
 };
 
 type MonthViewProps = {
@@ -112,13 +112,13 @@ const MonthCal: React.FC<MonthViewProps> = ({ events, size }) => {
       className={finalContainerClass}
       style={containerStyle}
     >
-      <div className="flex items-center justify-between px-4 py-2 border-b bg-background flex-shrink-0"> {/* Added flex-shrink-0 */}
+      <div className="flex items-center justify-between px-4 py-2 border-b bg-background flex-shrink-0"> 
         <button onClick={prevMonth} className="px-2 py-1 rounded hover:bg-accent" aria-label="Previous Month">&lt;</button>
         <h2 className="text-lg font-semibold">{format(currentDate, "MMMM yyyy")}</h2>
         <button onClick={nextMonth} className="px-2 py-1 rounded hover:bg-accent" aria-label="Next Month">&gt;</button>
       </div>
 
-      <div className="grid grid-cols-7 gap-px border-b bg-background text-center text-xs font-semibold leading-6 lg:flex-none flex-shrink-0"> {/* Added flex-shrink-0 */}
+      <div className="grid grid-cols-7 gap-px border-b bg-background text-center text-xs font-semibold leading-6 lg:flex-none flex-shrink-0"> 
         {weekdays.map((day) => (
           <div key={day} className="py-2">
             {day.charAt(0)}<span className="sr-only sm:not-sr-only">{day.slice(1)}</span>
